@@ -12,7 +12,8 @@ class TodayRatesPresenter
         BasePresenter(interactor as IInteractor<IPresenter>),
         TodayRatesContract.Presenter
 {
-    fun onCreate() {
+    override fun onCreate() {
+        super<BasePresenter>.onCreate()
         Log.d("TodayRatesPresenter", "onCreate")
     }
 }

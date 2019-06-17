@@ -12,5 +12,6 @@ class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today_rates)
+        presenter.onCreate()
     }
 }
