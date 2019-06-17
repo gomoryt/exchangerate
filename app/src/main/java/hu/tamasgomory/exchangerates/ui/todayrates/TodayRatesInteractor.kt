@@ -1,15 +1,14 @@
 package hu.tamasgomory.exchangerates.ui.todayrates
 
-import android.util.Log
 import javax.inject.Inject
 import hu.tamasgomory.exchangerates.base.BaseInteractor
-import java.util.*
+import hu.tamasgomory.exchangerates.service.CurrencyService
 
 class TodayRatesInteractor
-    @Inject constructor():
+    @Inject constructor(val currencyService: CurrencyService):
         BaseInteractor<TodayRatesContract.Presenter>(), TodayRatesContract.Interactor {
 
     override fun init() {
-
+        presenter.showSelectedCurrency(currencyService.currencyCodeBasedOnNetwork())
     }
 }

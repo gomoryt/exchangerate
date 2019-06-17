@@ -6,14 +6,13 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import hu.tamasgomory.exchangerates.ExchangeRatesApplication
-import hu.tamasgomory.exchangerates.ui.todayrates.TodayRatesModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
         modules = [
-            TodayRatesModule::class,
-            AndroidInjectionModule::class
+            AndroidInjectionModule::class,
+            ActivitiesModule::class
         ]
 )
 interface AppComponent: AndroidInjector<ExchangeRatesApplication> {
