@@ -10,6 +10,6 @@ class TodayRatesInteractor
         BaseInteractor<TodayRatesContract.Presenter>(), TodayRatesContract.Interactor {
 
     override fun init() {
-        
+
     }
 }

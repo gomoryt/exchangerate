@@ -5,8 +5,14 @@ abstract class BasePresenter(val interactor: IInteractor<IPresenter>) : IPresent
         interactor.presenter = this
     }
 
+
     override fun onCreate() {
         super.onCreate()
         interactor.init()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interactor.destroy()
     }
 }
