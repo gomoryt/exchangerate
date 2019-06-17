@@ -11,4 +11,6 @@ abstract class TodayRatesModule {
 
     @Binds
     abstract fun bindsTodayRatesPresenter(presenter: TodayRatesPresenter): TodayRatesContract.Presenter
+    @Binds
+    abstract fun bindsTodayRatesInteractor(interactor: TodayRatesInteractor): TodayRatesContract.Interactor
 }
