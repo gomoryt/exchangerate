@@ -13,6 +13,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 //import kotlin.collections.HashMap
@@ -52,7 +54,9 @@ class TodayRatesInteractor
                 .subscribeBy(
                         onNext = {
                             fetchLatestExchangeRates(it)
-                            presenter.showSelectedCurrency(it)
+                        },
+                        onError = {
+                            Log.e("TodayRatesInteractor", it.message)
                         }
                 )
     }
@@ -68,15 +72,20 @@ class TodayRatesInteractor
                     Function3 {
                         currency: String, amount: Double, rates: HashMap<String, Double> ->
                         Triple(currency, amount, rates)
-
                     }
                 )
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onNext = {
-                    presenter.showExchangeRates(it.first, it.second, it.third)
-                    Log.d("TodayRatesInteractor", "Today rates results updated")
-                })
+                .subscribeBy(
+                    onNext = {
+
+                        presenter.showExchangeRates(it.first, it.second, it.third)
+                        Log.d("TodayRatesInteractor", "Today rates results updated")
+                    },
+                    onError = {
+                        Log.e("TodayRatesInteractor", it.message)
+                    }
+                )
     }
 
 
@@ -96,10 +105,18 @@ class TodayRatesInteractor
                 .subscribeBy (
                         onSuccess = {todayRatesResponse ->
                             calculatorModel.rates.onNext(todayRatesResponse.rates)
-                            Log.d("TodayRatesInteractor", todayRatesResponse.toString())
+                            if (
+                                    calculatorModel.selectedBaseCurrency.hasValue() &&
+                                    calculatorModel.selectedBaseCurrency.value != todayRatesResponse.base
+                            ) {
+                                calculatorModel.selectedBaseCurrency.onNext(todayRatesResponse.base)
+                            }
                         },
                         onError = {
                             Log.w("TodayRatesInteractor", it)
+                            if (it is HttpException && it.code() == 400 && baseCurrency.isNotBlank()) {
+                                fetchLatestExchangeRates("")
+                            }
                         }
                 ))
     }
