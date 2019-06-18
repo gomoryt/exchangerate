@@ -9,6 +9,7 @@ interface TodayRatesContract {
         fun showSelectedCurrency(currencyCode: String)
         fun showAmount(amount: Double)
         fun displayError()
+        fun showExchangeRateResult(rates: List<TodayRateListItemModel>)
     }
     interface Presenter: IPresenter {
         fun showSelectedCurrency(currencyCode: String)

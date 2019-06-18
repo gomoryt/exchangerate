@@ -67,12 +67,14 @@ class TodayRatesInteractor
                     calculatorModel.rates,
                     Function3 {
                         currency: String, amount: Double, rates: HashMap<String, Double> ->
-                        presenter.showExchangeRates(currency, amount, rates)
+                        Triple(currency, amount, rates)
+
                     }
                 )
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
+                    presenter.showExchangeRates(it.first, it.second, it.third)
                     Log.d("TodayRatesInteractor", "Today rates results updated")
                 })
     }

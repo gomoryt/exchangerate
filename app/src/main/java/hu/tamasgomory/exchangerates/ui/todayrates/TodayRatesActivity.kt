@@ -3,15 +3,22 @@ package hu.tamasgomory.exchangerates.ui.todayrates
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.recyclerview.widget.LinearLayoutManager
 import hu.tamasgomory.exchangerates.R
 import hu.tamasgomory.exchangerates.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_today_rates.*
 
 class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRatesContract.View {
 
+    private var adapter = TodayRatesResultAdapter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today_rates)
+
+        ratesResultListView.adapter = adapter
+        ratesResultListView.layoutManager = LinearLayoutManager(this)
+
         amountEt.addTextChangedListener( object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
 
@@ -37,5 +44,9 @@ class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRa
 
     override fun displayError() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showExchangeRateResult(rates: List<TodayRateListItemModel>) {
+        adapter.items = rates
     }
 }

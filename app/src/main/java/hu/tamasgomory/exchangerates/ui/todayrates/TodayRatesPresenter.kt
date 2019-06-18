@@ -26,10 +26,10 @@ class TodayRatesPresenter
     override fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>) {
         rates.remove(baseCurrency)
         val multipliedRates = rates.map { entry ->
-            entry.key to entry.value * amount
-        }.toMap()
+            TodayRateListItemModel(entry.key, entry.value * amount)
+        }
 
-        Log.d("TodayRatesPresenter", multipliedRates.toString())
+        view.showExchangeRateResult(multipliedRates)
 
     }
 
