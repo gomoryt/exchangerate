@@ -3,6 +3,7 @@ package hu.tamasgomory.exchangerates.data
 import io.reactivex.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.collections.HashMap
 
 @Singleton
 class ExchangeRateCalculatorModel

@@ -34,4 +34,8 @@ class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRa
     override fun showAmount(amount: Double) {
         amountEt.text = Editable.Factory.getInstance().newEditable(amount.toString())
     }
+
+    override fun displayError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
