@@ -12,7 +12,8 @@ import javax.inject.Singleton
 @Component(
         modules = [
             AndroidInjectionModule::class,
-            ActivitiesModule::class
+            ActivitiesModule::class,
+            ApiModule::class
         ]
 )
 interface AppComponent: AndroidInjector<ExchangeRatesApplication> {
