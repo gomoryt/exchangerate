@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ExchangeRates</string>
-    <string name="today_rates_selected_currency">Selected curreny:</string>
+    <string name="today_rates_selected_currency">Selected currency:</string>
+    <string name="today_rates_amount">Amount:</string>
 </resources>

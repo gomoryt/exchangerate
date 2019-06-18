@@ -1,8 +1,8 @@
 package hu.tamasgomory.exchangerates.base
 
-abstract class BasePresenter<V: IView>(val view: V, val interactor: IInteractor<IPresenter>) : IPresenter {
+abstract class BasePresenter<out V: IView, out I: IInteractor<*>>(val view: V, val interactor: I) : IPresenter {
     init {
-        interactor.presenter = this
+        (interactor as IInteractor<IPresenter>).presenter = this
     }
 
 
