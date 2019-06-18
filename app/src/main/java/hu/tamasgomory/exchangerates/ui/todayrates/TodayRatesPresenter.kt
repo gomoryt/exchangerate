@@ -24,6 +24,9 @@ class TodayRatesPresenter
     }
 
     override fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>) {
+        view.availableCurrencies = rates.keys.toMutableList()
+        view.showSelectedCurrency(baseCurrency)
+
         rates.remove(baseCurrency)
         val multipliedRates = rates.map { entry ->
             TodayRateListItemModel(entry.key, entry.value * amount)
@@ -31,6 +34,10 @@ class TodayRatesPresenter
 
         view.showExchangeRateResult(multipliedRates)
 
+    }
+
+    override fun onCurrencyChanged(currencyCode: String) {
+        interactor.onCurrencyChanged(currencyCode)
     }
 
     override fun displayError() {

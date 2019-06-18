@@ -17,11 +17,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/selectedCurrencyTv"
+    <Spinner
+        android:id="@+id/currencySpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/selectedCurrencyLabel"
@@ -71,6 +70,28 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerSeparator"/>
+        app:layout_constraintTop_toBottomOf="@+id/currencyColumnLabel"/>
+
+    <TextView
+        android:id="@+id/currencyColumnLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/today_rates_currency_column_label"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/headerSeparator"
+        app:layout_constraintTop_toBottomOf="@+id/amountLabel"/>
+
+    <TextView
+        android:id="@+id/exchangeRateColumnLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/today_rates_exchange_rate_column_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/currencyColumnLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/currencyColumnLabel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

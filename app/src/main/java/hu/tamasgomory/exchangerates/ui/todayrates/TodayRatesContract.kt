@@ -10,15 +10,18 @@ interface TodayRatesContract {
         fun showAmount(amount: Double)
         fun displayError()
         fun showExchangeRateResult(rates: List<TodayRateListItemModel>)
+        var availableCurrencies: MutableList<String>
     }
     interface Presenter: IPresenter {
         fun showSelectedCurrency(currencyCode: String)
         fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>)
         fun onAmountChanged(amount: Double)
         fun displayError()
+        fun onCurrencyChanged(currencyCode: String)
     }
     interface Interactor: IInteractor<Presenter> {
         fun onAmountChanged(amount: Double)
+        fun onCurrencyChanged(currencyCode: String)
         fun fetchLatestExchangeRates(baseCurrency: String)
     }
 }
