@@ -1,20 +1,22 @@
 package hu.tamasgomory.exchangerates.base
 
-abstract class BasePresenter<out V: IView, out I: IInteractor<*>>(val view: V, val interactor: I) : IPresenter {
+abstract class BasePresenter<out V: IView, out R: IRouter, out I: IInteractor<*>>(val view: V, val router: R?, val interactor: I?) : IPresenter {
 
     init {
-        @Suppress("UNCHECKED_CAST")
-        (interactor as IInteractor<IPresenter>).presenter = this
+        if (interactor != null) {
+            @Suppress("UNCHECKED_CAST")
+            (interactor as IInteractor<IPresenter>).presenter = this
+        }
     }
 
 
     override fun onCreate() {
         super.onCreate()
-        interactor.init()
+        interactor?.init()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        interactor.destroy()
+        interactor?.destroy()
     }
 }

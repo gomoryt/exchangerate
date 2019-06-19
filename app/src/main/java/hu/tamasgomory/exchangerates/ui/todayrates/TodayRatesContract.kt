@@ -2,7 +2,9 @@ package hu.tamasgomory.exchangerates.ui.todayrates
 
 import hu.tamasgomory.exchangerates.base.IInteractor
 import hu.tamasgomory.exchangerates.base.IPresenter
+import hu.tamasgomory.exchangerates.base.IRouter
 import hu.tamasgomory.exchangerates.base.IView
+import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRateListItemModel
 
 interface TodayRatesContract {
     interface View : IView {
@@ -23,5 +25,10 @@ interface TodayRatesContract {
         fun onAmountChanged(amount: Double)
         fun onCurrencyChanged(currencyCode: String)
         fun fetchLatestExchangeRates(baseCurrency: String)
+    }
+
+    interface Router: IRouter {
+        fun openBaseCurrencySelectorDialog()
+        fun startRatesHistoryScreen()
     }
 }

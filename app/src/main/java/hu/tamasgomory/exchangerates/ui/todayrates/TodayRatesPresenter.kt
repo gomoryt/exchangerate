@@ -1,13 +1,13 @@
 package hu.tamasgomory.exchangerates.ui.todayrates
 
 import hu.tamasgomory.exchangerates.base.BasePresenter
+import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRateListItemModel
 import javax.inject.Inject
-import android.util.Log
 
 class TodayRatesPresenter
     @Inject
-    constructor(view: TodayRatesContract.View, interactor: TodayRatesContract.Interactor):
-        BasePresenter<TodayRatesContract.View, TodayRatesContract.Interactor>(view, interactor),
+    constructor(view: TodayRatesContract.View, router: TodayRatesContract.Router, interactor: TodayRatesContract.Interactor):
+        BasePresenter<TodayRatesContract.View, TodayRatesContract.Router, TodayRatesContract.Interactor>(view, router, interactor),
         TodayRatesContract.Presenter
 {
     override fun onCreate() {
@@ -20,7 +20,7 @@ class TodayRatesPresenter
     }
 
     override fun onAmountChanged(amount: Double) {
-        interactor.onAmountChanged(amount)
+        interactor!!.onAmountChanged(amount)
     }
 
     override fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>) {
@@ -37,7 +37,7 @@ class TodayRatesPresenter
     }
 
     override fun onCurrencyChanged(currencyCode: String) {
-        interactor.onCurrencyChanged(currencyCode)
+        interactor!!.onCurrencyChanged(currencyCode)
     }
 
     override fun displayError() {

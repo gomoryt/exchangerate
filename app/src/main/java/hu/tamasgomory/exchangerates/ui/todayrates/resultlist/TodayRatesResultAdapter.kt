@@ -1,4 +1,4 @@
-package hu.tamasgomory.exchangerates.ui.todayrates
+package hu.tamasgomory.exchangerates.ui.todayrates.resultlist
 
 import android.content.Context
 import android.view.LayoutInflater

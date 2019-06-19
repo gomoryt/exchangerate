@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.tamasgomory.exchangerates.R
 import hu.tamasgomory.exchangerates.base.BaseActivity
+import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRateListItemModel
+import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRatesResultAdapter
 import kotlinx.android.synthetic.main.activity_today_rates.*
 
 class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRatesContract.View {
