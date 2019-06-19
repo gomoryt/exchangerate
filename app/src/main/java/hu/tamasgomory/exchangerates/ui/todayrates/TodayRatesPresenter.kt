@@ -19,7 +19,7 @@ class TodayRatesPresenter
         view.showAmount(1.0)
     }
 
-    override fun showSelectedCurrency(currencyCode: String) {
+    override fun onSelectedCurrencyChanged(currencyCode: String) {
         view.showSelectedCurrency(currencyCode)
     }
 
@@ -27,7 +27,7 @@ class TodayRatesPresenter
         interactor!!.onAmountChanged(amount)
     }
 
-    override fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>) {
+    override fun exchangeRatesResultReceived(baseCurrency: String, amount: Double, rates: HashMap<String, Double>) {
         view.showSelectedCurrency(baseCurrency)
 
         rates.remove(baseCurrency)

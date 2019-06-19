@@ -14,8 +14,12 @@ class CurrencySelectorPresenter
     ),
     CurrencySelectorContract.Presenter
 {
-    override fun onCreate() {
-        super<BasePresenter>.onCreate()
-        Log.d("CurrencySelector","Presenter onCreate")
+    override fun availableCurrenciesReceived(currencies: List<String>) {
+        view.showCurrencies(currencies)
+    }
+
+    override fun onCurrencySelected(currency: String) {
+        interactor!!.changeBaseCurrency(currency)
+        view.dismiss()
     }
 }

@@ -14,7 +14,6 @@ import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 //import kotlin.collections.HashMap
@@ -79,7 +78,7 @@ class TodayRatesInteractor
                 .subscribeBy(
                     onNext = {
 
-                        presenter.showExchangeRates(it.first, it.second, it.third)
+                        presenter.exchangeRatesResultReceived(it.first, it.second, it.third)
                         Log.d("TodayRatesInteractor", "Today rates results updated")
                     },
                     onError = {

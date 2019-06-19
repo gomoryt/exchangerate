@@ -14,8 +14,8 @@ interface TodayRatesContract {
         fun showExchangeRateResult(rates: List<TodayRateListItemModel>)
     }
     interface Presenter: IPresenter {
-        fun showSelectedCurrency(currencyCode: String)
-        fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>)
+        fun onSelectedCurrencyChanged(currencyCode: String)
+        fun exchangeRatesResultReceived(baseCurrency: String, amount: Double, rates: HashMap<String, Double>)
         fun onAmountChanged(amount: Double)
         fun displayError()
         fun onCurrencyCodeClicked()
