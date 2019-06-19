@@ -12,13 +12,13 @@ import kotlinx.android.synthetic.main.activity_today_rates.*
 
 class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRatesContract.View {
 
-    private var adapter = TodayRatesResultAdapter(this)
+    private lateinit var adapter: TodayRatesResultAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today_rates)
 
-
+        adapter = TodayRatesResultAdapter(this, presenter)
         ratesResultListView.adapter = adapter
         ratesResultListView.layoutManager = LinearLayoutManager(this)
 

@@ -1,13 +1,16 @@
 package hu.tamasgomory.exchangerates.ui.todayrates.currencyselecor
 
-import android.util.Log
 import hu.tamasgomory.exchangerates.base.BasePresenter
+import hu.tamasgomory.exchangerates.base.IRouter
 import javax.inject.Inject
 
 class CurrencySelectorPresenter
     @Inject
-    constructor(view: CurrencySelectorContract.View, interactor: CurrencySelectorContract.Interactor):
-    BasePresenter<CurrencySelectorContract.View, CurrencySelectorContract.Router, CurrencySelectorContract.Interactor>(
+    constructor(
+            view: CurrencySelectorContract.View,
+            interactor: CurrencySelectorContract.Interactor
+    ):
+    BasePresenter<CurrencySelectorContract.View, IRouter, CurrencySelectorContract.Interactor>(
             view,
             null,
             interactor

@@ -1,5 +1,6 @@
 package hu.tamasgomory.exchangerates.ui.todayrates
 
+import hu.tamasgomory.exchangerates.ui.exchangeratehistory.ExchangeRateHistoryActivity
 import hu.tamasgomory.exchangerates.ui.todayrates.currencyselecor.CurrencySelectorDialogFragment
 import javax.inject.Inject
 
@@ -12,8 +13,10 @@ class TodayRatesRouter
         dialog.show(view.fragmentManager(), CURRENCY_SELECTOR_DIALOG_TAG)
     }
 
-    override fun startRatesHistoryScreen() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun startRatesHistoryScreen(targetCurrency: String) {
+        view.viewContext().apply {
+            startActivity(ExchangeRateHistoryActivity.newIntent(this, targetCurrency))
+        }
     }
 
     companion object {

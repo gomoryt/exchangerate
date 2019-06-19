@@ -4,14 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import hu.tamasgomory.exchangerates.R
+import hu.tamasgomory.exchangerates.base.listener.OnCurrencySelectedListener
 import hu.tamasgomory.exchangerates.ui.todayrates.currencyselecor.CurrencySelectorContract
 import kotlinx.android.synthetic.main.currency_list_item.view.*
 
 class CurrencyListAdapter(
         val context: Context,
-        var listener: CurrencySelectorContract.OnCurrencySelectedListener
+        var listener: OnCurrencySelectedListener
     ): RecyclerView.Adapter<CurrencyListAdapter.ViewHolder>() {
 
     var items: List<String> = ArrayList()
@@ -35,7 +37,7 @@ class CurrencyListAdapter(
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val currencyCodeTv = view.currencyCodeTv
+        val currencyCodeTv: TextView = view.currencyCodeTv
     }
 
 }

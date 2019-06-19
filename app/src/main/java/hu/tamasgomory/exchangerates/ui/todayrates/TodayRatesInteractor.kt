@@ -92,12 +92,6 @@ class TodayRatesInteractor
         calculatorModel.amount.onNext(amount)
     }
 
-    override fun onCurrencyChanged(currencyCode: String) {
-        if (calculatorModel.selectedBaseCurrency.value != currencyCode) {
-            calculatorModel.selectedBaseCurrency.onNext(currencyCode)
-        }
-    }
-
     override fun fetchLatestExchangeRates(baseCurrency: String) {
         compositeDisposable.add(apiService.latestExchangeRates(baseCurrency)
                 .subscribeOn(Schedulers.io())

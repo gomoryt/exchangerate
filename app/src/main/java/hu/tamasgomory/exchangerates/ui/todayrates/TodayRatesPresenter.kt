@@ -19,7 +19,7 @@ class TodayRatesPresenter
         view.showAmount(1.0)
     }
 
-    override fun onSelectedCurrencyChanged(currencyCode: String) {
+    override fun onBasedCurrencyChanged(currencyCode: String) {
         view.showSelectedCurrency(currencyCode)
     }
 
@@ -41,6 +41,10 @@ class TodayRatesPresenter
 
     override fun onCurrencyCodeClicked() {
         router!!.openBaseCurrencySelectorDialog()
+    }
+
+    override fun onCurrencySelected(currency: String) {
+        router!!.startRatesHistoryScreen(currency)
     }
 
     override fun displayError() {
