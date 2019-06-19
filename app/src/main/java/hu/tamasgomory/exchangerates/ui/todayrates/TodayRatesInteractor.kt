@@ -5,7 +5,7 @@ import javax.inject.Inject
 import hu.tamasgomory.exchangerates.base.BaseInteractor
 import hu.tamasgomory.exchangerates.data.ExchangeRateCalculatorModel
 import hu.tamasgomory.exchangerates.data.api.ExchangeRatesApiService
-import hu.tamasgomory.exchangerates.service.CurrencyService
+import hu.tamasgomory.exchangerates.util.CurrencyUtil
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,11 +16,10 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
 
-//import kotlin.collections.HashMap
 
 class TodayRatesInteractor
     @Inject constructor(
-            val currencyService: CurrencyService,
+            val currencyUtil: CurrencyUtil,
             val calculatorModel: ExchangeRateCalculatorModel,
             val apiService: ExchangeRatesApiService
     ):
@@ -42,7 +41,7 @@ class TodayRatesInteractor
 
     private fun chooseBaseCurrency() {
         if (!calculatorModel.selectedBaseCurrency.hasValue()) {
-            val defaultBaseCurrency = currencyService.currencyCodeBasedOnNetwork()
+            val defaultBaseCurrency = currencyUtil.currencyCodeBasedOnNetwork()
             calculatorModel.selectedBaseCurrency.onNext(defaultBaseCurrency)
         }
     }

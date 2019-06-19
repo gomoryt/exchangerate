@@ -47,6 +47,9 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.23.1'
     kapt 'com.google.dagger:dagger-android-processor:2.23.1'
 
+    // Joda
+    implementation 'net.danlew:android.joda:2.10.1.2'
+
     testImplementation 'junit:junit:4.12'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

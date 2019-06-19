@@ -2,11 +2,19 @@ package hu.tamasgomory.exchangerates.ui.todayrates
 
 import hu.tamasgomory.exchangerates.base.BasePresenter
 import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRateListItemModel
+import hu.tamasgomory.exchangerates.util.CurrencyUtil
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 class TodayRatesPresenter
     @Inject
-    constructor(view: TodayRatesContract.View, router: TodayRatesContract.Router, interactor: TodayRatesContract.Interactor):
+    constructor(
+            view: TodayRatesContract.View,
+            router: TodayRatesContract.Router,
+            interactor: TodayRatesContract.Interactor,
+            val currencyUtil: CurrencyUtil
+    ):
         BasePresenter<TodayRatesContract.View, TodayRatesContract.Router, TodayRatesContract.Interactor>(
                 view,
                 router,
@@ -32,7 +40,9 @@ class TodayRatesPresenter
 
         rates.remove(baseCurrency)
         val multipliedRates = rates.map { entry ->
-            TodayRateListItemModel(entry.key, entry.value * amount)
+            val currency = Currency.getInstance(entry.key)
+            val rate = currencyUtil.roundCurrency(currency, entry.value * amount)
+            TodayRateListItemModel(entry.key, "%s %s". format(rate, currency.symbol))
         }
 
         view.showExchangeRateResult(multipliedRates)

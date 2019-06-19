@@ -9,6 +9,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
 import hu.tamasgomory.exchangerates.R
+import java.util.*
 
 /**
  * TODO: document your custom view class.
@@ -21,9 +22,15 @@ class ExchangeHistoryGraphView : View {
 
     private var textPaint: TextPaint? = null
 
+    private var graphCurrencySymbol: String = ""
+
     var headerModel: HeaderModel? = null
         set(value) {
             field = value
+            value?.let {
+                graphCurrencySymbol = Currency.getInstance(it.targetCurrency).symbol
+            }
+
             if (!columns.isNullOrEmpty()) {
                 invalidateTextPaintAndMeasurements()
             }
@@ -163,7 +170,14 @@ class ExchangeHistoryGraphView : View {
 
                         textPaint?.textAlign = Paint.Align.CENTER
                         textPaint?.color = textColor
-                        drawText(it.rate.toString(), xPos, columnLabelYPos, textPaint)
+
+                        drawText(
+                                "%s %s".format(it.rate, graphCurrencySymbol),
+                                xPos,
+                                columnLabelYPos,
+                                textPaint
+                        )
+
                         drawText(it.date, xPos, columnLabelYPos+labelHeight, textPaint)
 
                         previousXPos = xPos

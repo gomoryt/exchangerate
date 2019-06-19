@@ -3,6 +3,7 @@ package hu.tamasgomory.exchangerates.ui.exchangeratehistory
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import hu.tamasgomory.exchangerates.R
 import hu.tamasgomory.exchangerates.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_exhange_rate_history.*
@@ -18,16 +19,13 @@ class ExchangeRateHistoryActivity:
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exhange_rate_history)
         targetCurrency = intent.getStringExtra(EXTRA_TARGET_CURRENCY)
-        graphView.headerModel = ExchangeHistoryGraphView.HeaderModel(1.0, "EUR", "HUF")
-        graphView.columns = listOf(
-                ExchangeHistoryGraphView.ColumnModel(300.12, "2019-06-12"),
-                ExchangeHistoryGraphView.ColumnModel(350.12, "2019-06-13"),
-                ExchangeHistoryGraphView.ColumnModel(330.12, "2019-06-14"),
-                ExchangeHistoryGraphView.ColumnModel(390.12, "2019-06-15"),
-                ExchangeHistoryGraphView.ColumnModel(352.12, "2019-06-16"),
-                ExchangeHistoryGraphView.ColumnModel(351.12, "2019-06-17"),
-                ExchangeHistoryGraphView.ColumnModel(312.12, "2019-06-18")
-        )
+    }
+
+    override fun showRates(amount: Double, baseCurrency: String, rates: List<ExchangeHistoryGraphView.ColumnModel>) {
+        graphView.headerModel = ExchangeHistoryGraphView.HeaderModel(amount, baseCurrency, targetCurrency)
+        graphView.columns = rates
+        graphView.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
     }
 
     companion object {
