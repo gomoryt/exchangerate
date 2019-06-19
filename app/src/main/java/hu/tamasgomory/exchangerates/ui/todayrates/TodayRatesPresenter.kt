@@ -7,7 +7,11 @@ import javax.inject.Inject
 class TodayRatesPresenter
     @Inject
     constructor(view: TodayRatesContract.View, router: TodayRatesContract.Router, interactor: TodayRatesContract.Interactor):
-        BasePresenter<TodayRatesContract.View, TodayRatesContract.Router, TodayRatesContract.Interactor>(view, router, interactor),
+        BasePresenter<TodayRatesContract.View, TodayRatesContract.Router, TodayRatesContract.Interactor>(
+                view,
+                router,
+                interactor
+        ),
         TodayRatesContract.Presenter
 {
     override fun onCreate() {
@@ -24,7 +28,6 @@ class TodayRatesPresenter
     }
 
     override fun showExchangeRates(baseCurrency: String, amount: Double, rates: HashMap<String, Double>) {
-        view.availableCurrencies = rates.keys.toMutableList()
         view.showSelectedCurrency(baseCurrency)
 
         rates.remove(baseCurrency)
@@ -36,8 +39,8 @@ class TodayRatesPresenter
 
     }
 
-    override fun onCurrencyChanged(currencyCode: String) {
-        interactor!!.onCurrencyChanged(currencyCode)
+    override fun onCurrencyCodeClicked() {
+        router!!.openBaseCurrencySelectorDialog()
     }
 
     override fun displayError() {

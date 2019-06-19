@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -21,5 +22,9 @@ abstract class BaseActivity<P: IPresenter>: DaggerAppCompatActivity(), IView {
 
     override fun viewContext(): Context {
         return this
+    }
+
+    override fun fragmentManager(): FragmentManager {
+        return supportFragmentManager
     }
 }
