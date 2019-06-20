@@ -1,17 +1,13 @@
 package hu.tamasgomory.exchangerates.ui.exchangeratehistory
 
-import android.util.Log
 import hu.tamasgomory.exchangerates.base.BaseInteractor
 import hu.tamasgomory.exchangerates.data.ExchangeRateCalculatorModel
 import hu.tamasgomory.exchangerates.data.api.ExchangeRatesApiService
-import hu.tamasgomory.exchangerates.data.api.response.ExchangeRateHistoryResponse
-import io.reactivex.Single
-import io.reactivex.SingleSource
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
+import timber.log.Timber
 import javax.inject.Inject
 
 class ExchangeRateHistoryInteractor
@@ -43,12 +39,12 @@ class ExchangeRateHistoryInteractor
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeBy(
                                 onNext = {
-                                    Log.d("HistoryInteractor", "Response")
+                                    Timber.d("History response received")
                                     val amount = calculatorModel.amount.value?:1.0
                                     presenter.onExchangeRatesHistoryResponseReceived(it, amount)
                                 },
                                 onError = {
-                                    Log.d("HistoryInteractor", it.message)
+                                    Timber.e(it, "An error occured on fetch exchange rate history")
                                     presenter.showError()
                                 }
 

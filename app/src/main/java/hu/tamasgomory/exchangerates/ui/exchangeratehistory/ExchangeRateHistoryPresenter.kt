@@ -36,7 +36,7 @@ class ExchangeRateHistoryPresenter
         response.rates.keys.forEach {date ->
             val rate = response.rates[date]?.get(view.targetCurrency)?.times(amount) ?: 0.0
 
-            val roundedRate = currencyUtil.roundCurrency(currency, rate*amount)
+            val roundedRate = currencyUtil.roundCurrency(currency, rate)
             columns.add(ExchangeHistoryGraphView.ColumnModel(roundedRate, date))
 
         }

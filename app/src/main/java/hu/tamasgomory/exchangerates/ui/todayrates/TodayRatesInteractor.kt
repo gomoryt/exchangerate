@@ -1,6 +1,5 @@
 package hu.tamasgomory.exchangerates.ui.todayrates
 
-import android.util.Log
 import javax.inject.Inject
 import hu.tamasgomory.exchangerates.base.BaseInteractor
 import hu.tamasgomory.exchangerates.data.ExchangeRateCalculatorModel
@@ -13,10 +12,10 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
@@ -42,14 +41,14 @@ class TodayRatesInteractor
 
     }
 
-    private fun chooseBaseCurrency() {
+    internal fun chooseBaseCurrency() {
         if (!calculatorModel.selectedBaseCurrency.hasValue()) {
             val defaultBaseCurrency = currencyUtil.currencyCodeBasedOnNetwork()
             calculatorModel.selectedBaseCurrency.onNext(defaultBaseCurrency)
         }
     }
 
-    private fun subscribeToBaseCurrencyChange(): Disposable {
+    internal fun subscribeToBaseCurrencyChange(): Disposable {
         return calculatorModel.selectedBaseCurrency
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,12 +57,12 @@ class TodayRatesInteractor
                             fetchLatestExchangeRates(it)
                         },
                         onError = {
-                            Log.e("TodayRatesInteractor", it.message)
+                            Timber.e(it.message)
                         }
                 )
     }
 
-    private fun subscribeToCalculatedRatesResult(): Disposable {
+    internal fun subscribeToCalculatedRatesResult(): Disposable {
         return Observable.combineLatest(
                     calculatorModel.amount
                             .toFlowable(BackpressureStrategy.LATEST)
@@ -79,12 +78,15 @@ class TodayRatesInteractor
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onNext = {
-
-                        presenter.exchangeRatesResultReceived(calculatorModel.selectedBaseCurrency.value!!, it.first, it.second)
-                        Log.d("TodayRatesInteractor", "Today rates results updated")
+                        Timber.d("Today rates results updated")
+                        presenter.exchangeRatesResultReceived(
+                                calculatorModel.selectedBaseCurrency.value!!,
+                                it.first,
+                                it.second
+                        )
                     },
                     onError = {
-                        Log.e("TodayRatesInteractor", it.message)
+                        Timber.e(it)
                     }
                 )
     }
@@ -98,32 +100,32 @@ class TodayRatesInteractor
         presenter.showLoading()
         compositeDisposable.add(
                 Single.zip(
-                            apiService.latestExchangeRates(baseCurrency),
-                            Single.timer(500, TimeUnit.MILLISECONDS), // Loading layout atleast 500 ms
-                            BiFunction<TodayRatesResponse, Long, TodayRatesResponse> { response, notUsed ->
-                                response
-                            }
-                        )
-                        .subscribeOn(Schedulers.io())
-                        .subscribeBy (
-                                onSuccess = {todayRatesResponse ->
-                                    calculatorModel.rates.onNext(todayRatesResponse.rates)
-                                    if (
-                                            calculatorModel.selectedBaseCurrency.hasValue() &&
-                                            calculatorModel.selectedBaseCurrency.value != todayRatesResponse.base
-                                    ) {
-                                        calculatorModel.selectedBaseCurrency.onNext(todayRatesResponse.base)
-                                    }
-                                },
-                                onError = {
-                                    Log.w("TodayRatesInteractor", it)
-                                    if (it is HttpException && it.code() == 400 && baseCurrency.isNotBlank()) {
-                                        fetchLatestExchangeRates("")
-                                    } else {
-                                        presenter.showError()
-                                    }
+                        apiService.latestExchangeRates(baseCurrency),
+                        Single.timer(500, TimeUnit.MILLISECONDS), // Loading layout atleast 500 ms
+                        BiFunction<TodayRatesResponse, Long, TodayRatesResponse> { response, notUsed ->
+                            response
+                        }
+                    )
+                    .subscribeOn(Schedulers.io())
+                    .subscribeBy (
+                            onSuccess = {todayRatesResponse ->
+                                calculatorModel.rates.onNext(todayRatesResponse.rates)
+                                if (
+                                        calculatorModel.selectedBaseCurrency.hasValue() &&
+                                        calculatorModel.selectedBaseCurrency.value != todayRatesResponse.base
+                                ) {
+                                    calculatorModel.selectedBaseCurrency.onNext(todayRatesResponse.base)
                                 }
-                        )
+                            },
+                            onError = {
+                                Timber.w(it, "Error occured on fetch latest exchange rate")
+                                if (it is HttpException && it.code() == 400 && baseCurrency.isNotBlank()) {
+                                    fetchLatestExchangeRates("")
+                                } else {
+                                    presenter.showError()
+                                }
+                            }
+                    )
         )
     }
 }
