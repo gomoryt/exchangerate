@@ -5,11 +5,14 @@ import javax.inject.Inject
 import hu.tamasgomory.exchangerates.base.BaseInteractor
 import hu.tamasgomory.exchangerates.data.ExchangeRateCalculatorModel
 import hu.tamasgomory.exchangerates.data.api.ExchangeRatesApiService
+import hu.tamasgomory.exchangerates.data.api.response.TodayRatesResponse
 import hu.tamasgomory.exchangerates.util.CurrencyUtil
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -49,6 +52,7 @@ class TodayRatesInteractor
     private fun subscribeToBaseCurrencyChange(): Disposable {
         return calculatorModel.selectedBaseCurrency
                 .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
                             fetchLatestExchangeRates(it)
@@ -61,15 +65,14 @@ class TodayRatesInteractor
 
     private fun subscribeToCalculatedRatesResult(): Disposable {
         return Observable.combineLatest(
-                    calculatorModel.selectedBaseCurrency,
                     calculatorModel.amount
                             .toFlowable(BackpressureStrategy.LATEST)
                             .throttleWithTimeout(300, TimeUnit.MILLISECONDS)
                             .toObservable(),
                     calculatorModel.rates,
-                    Function3 {
-                        currency: String, amount: Double, rates: HashMap<String, Double> ->
-                        Triple(currency, amount, rates)
+                    BiFunction {
+                        amount: Double, rates: HashMap<String, Double> ->
+                        Pair(amount, rates)
                     }
                 )
                 .subscribeOn(Schedulers.computation())
@@ -77,7 +80,7 @@ class TodayRatesInteractor
                 .subscribeBy(
                     onNext = {
 
-                        presenter.exchangeRatesResultReceived(it.first, it.second, it.third)
+                        presenter.exchangeRatesResultReceived(calculatorModel.selectedBaseCurrency.value!!, it.first, it.second)
                         Log.d("TodayRatesInteractor", "Today rates results updated")
                     },
                     onError = {
@@ -92,24 +95,35 @@ class TodayRatesInteractor
     }
 
     override fun fetchLatestExchangeRates(baseCurrency: String) {
-        compositeDisposable.add(apiService.latestExchangeRates(baseCurrency)
-                .subscribeOn(Schedulers.io())
-                .subscribeBy (
-                        onSuccess = {todayRatesResponse ->
-                            calculatorModel.rates.onNext(todayRatesResponse.rates)
-                            if (
-                                    calculatorModel.selectedBaseCurrency.hasValue() &&
-                                    calculatorModel.selectedBaseCurrency.value != todayRatesResponse.base
-                            ) {
-                                calculatorModel.selectedBaseCurrency.onNext(todayRatesResponse.base)
+        presenter.showLoading()
+        compositeDisposable.add(
+                Single.zip(
+                            apiService.latestExchangeRates(baseCurrency),
+                            Single.timer(500, TimeUnit.MILLISECONDS), // Loading layout atleast 500 ms
+                            BiFunction<TodayRatesResponse, Long, TodayRatesResponse> { response, notUsed ->
+                                response
                             }
-                        },
-                        onError = {
-                            Log.w("TodayRatesInteractor", it)
-                            if (it is HttpException && it.code() == 400 && baseCurrency.isNotBlank()) {
-                                fetchLatestExchangeRates("")
-                            }
-                        }
-                ))
+                        )
+                        .subscribeOn(Schedulers.io())
+                        .subscribeBy (
+                                onSuccess = {todayRatesResponse ->
+                                    calculatorModel.rates.onNext(todayRatesResponse.rates)
+                                    if (
+                                            calculatorModel.selectedBaseCurrency.hasValue() &&
+                                            calculatorModel.selectedBaseCurrency.value != todayRatesResponse.base
+                                    ) {
+                                        calculatorModel.selectedBaseCurrency.onNext(todayRatesResponse.base)
+                                    }
+                                },
+                                onError = {
+                                    Log.w("TodayRatesInteractor", it)
+                                    if (it is HttpException && it.code() == 400 && baseCurrency.isNotBlank()) {
+                                        fetchLatestExchangeRates("")
+                                    } else {
+                                        presenter.showError()
+                                    }
+                                }
+                        )
+        )
     }
 }

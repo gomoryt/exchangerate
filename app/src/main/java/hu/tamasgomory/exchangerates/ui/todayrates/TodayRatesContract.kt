@@ -11,14 +11,16 @@ interface TodayRatesContract {
     interface View : IView {
         fun showSelectedCurrency(currencyCode: String)
         fun showAmount(amount: Double)
-        fun displayError()
+        fun showError()
+        fun showLoading()
         fun showExchangeRateResult(rates: List<TodayRateListItemModel>)
     }
     interface Presenter: IPresenter, OnCurrencySelectedListener {
         fun onBasedCurrencyChanged(currencyCode: String)
         fun exchangeRatesResultReceived(baseCurrency: String, amount: Double, rates: HashMap<String, Double>)
         fun onAmountChanged(amount: Double)
-        fun displayError()
+        fun showError()
+        fun showLoading()
         fun onCurrencyCodeClicked()
     }
     interface Interactor: IInteractor<Presenter> {

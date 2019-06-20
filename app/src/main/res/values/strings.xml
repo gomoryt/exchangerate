@@ -4,4 +4,5 @@
     <string name="today_rates_amount">Amount:</string>
     <string name="today_rates_currency_column_label">Currency</string>
     <string name="today_rates_exchange_rate_column_label">Exchange rate</string>
+    <string name="error_something_went_wrong">Something went wrong!</string>
 </resources>

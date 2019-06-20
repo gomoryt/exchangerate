@@ -10,10 +10,14 @@ class ExchangeRateHistoryContract {
     interface View: IView {
         var targetCurrency: String
         fun showRates(amount: Double, baseCurrency: String, rates: List<ExchangeHistoryGraphView.ColumnModel>)
+        fun showError()
+        fun showLoading()
     }
     interface Presenter: IPresenter {
 
         fun onExchangeRatesHistoryResponseReceived(response: ExchangeRateHistoryResponse, amount: Double)
+        fun showError()
+        fun showLoading()
     }
     interface Interactor: IInteractor<Presenter> {
         fun fetchExchangeRateHistory(targetCurrency: String)

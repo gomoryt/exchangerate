@@ -3,11 +3,13 @@ package hu.tamasgomory.exchangerates.ui.todayrates
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.tamasgomory.exchangerates.R
 import hu.tamasgomory.exchangerates.base.BaseActivity
 import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRateListItemModel
 import hu.tamasgomory.exchangerates.ui.todayrates.resultlist.TodayRatesResultAdapter
+import hu.tamasgomory.exchangerates.util.ViewUtils
 import kotlinx.android.synthetic.main.activity_today_rates.*
 
 class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRatesContract.View {
@@ -43,11 +45,22 @@ class TodayRatesActivity : BaseActivity<TodayRatesContract.Presenter>(), TodayRa
         amountEt.text = Editable.Factory.getInstance().newEditable(amount.toString())
     }
 
-    override fun displayError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun showExchangeRateResult(rates: List<TodayRateListItemModel>) {
         adapter.items = rates
+        switchLayout(resultVisibility = true)
+    }
+
+    override fun showError() {
+        switchLayout(errorVisibility = true)
+    }
+
+    override fun showLoading() {
+        switchLayout(loadingVisibility = true)
+    }
+
+    private fun switchLayout(loadingVisibility: Boolean = false, errorVisibility: Boolean = false, resultVisibility: Boolean = false) {
+        ViewUtils.toggle(progressBar, loadingVisibility)
+        ViewUtils.toggle(resultView, resultVisibility)
+        ViewUtils.toggle(errorView, errorVisibility)
     }
 }

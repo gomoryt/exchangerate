@@ -43,4 +43,13 @@ class ExchangeRateHistoryPresenter
         columns.sortBy { it.date }
         view.showRates(amount, response.base, columns)
     }
+
+    override fun showError() {
+        view.showError()
+    }
+
+
+    override fun showLoading() {
+        view.showLoading()
+    }
 }

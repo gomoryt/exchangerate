@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.View
 import hu.tamasgomory.exchangerates.R
 import hu.tamasgomory.exchangerates.base.BaseActivity
+import hu.tamasgomory.exchangerates.util.ViewUtils
 import kotlinx.android.synthetic.main.activity_exhange_rate_history.*
-import kotlinx.android.synthetic.main.activity_exhange_rate_history.view.*
 
 class ExchangeRateHistoryActivity:
         BaseActivity<ExchangeRateHistoryContract.Presenter>(),
@@ -24,8 +24,23 @@ class ExchangeRateHistoryActivity:
     override fun showRates(amount: Double, baseCurrency: String, rates: List<ExchangeHistoryGraphView.ColumnModel>) {
         graphView.headerModel = ExchangeHistoryGraphView.HeaderModel(amount, baseCurrency, targetCurrency)
         graphView.columns = rates
-        graphView.visibility = View.VISIBLE
-        progressBar.visibility = View.GONE
+        switchLayout(graphVisibility = true)
+    }
+
+
+    override fun showError() {
+        switchLayout(errorVisibility = true)
+    }
+
+    override fun showLoading() {
+        switchLayout(loadingVisibility = true)
+    }
+
+
+    private fun switchLayout(loadingVisibility: Boolean = false, errorVisibility: Boolean = false, graphVisibility: Boolean = false) {
+        ViewUtils.toggle(progressBar, loadingVisibility)
+        ViewUtils.toggle(graphView, graphVisibility)
+        ViewUtils.toggle(errorView, errorVisibility)
     }
 
     companion object {

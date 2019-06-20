@@ -57,8 +57,11 @@ class TodayRatesPresenter
         router!!.startRatesHistoryScreen(currency)
     }
 
-    override fun displayError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showError() {
+        view.showError()
     }
 
+    override fun showLoading() {
+        view.showLoading()
+    }
 }

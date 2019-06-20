@@ -26,6 +26,7 @@ class ExchangeRateHistoryInteractor
 
 
     override fun fetchExchangeRateHistory(targetCurrency: String) {
+        presenter.showLoading()
         val today = DateTime.now()
         val oneWeekAgo = today.minusWeeks(1)
         compositeDisposable.add(
@@ -48,6 +49,7 @@ class ExchangeRateHistoryInteractor
                                 },
                                 onError = {
                                     Log.d("HistoryInteractor", it.message)
+                                    presenter.showError()
                                 }
 
                         )
